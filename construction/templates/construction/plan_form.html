@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if object %}Editar{% else %}Nuevo{% endif %} Plan de Emergencia
+{% endblock %}
+
+{% block content %}
+{% load custom_filters %}
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="mb-0">
+            <i class="fas fa-{% if object %}edit{% else %}plus{% endif %}"></i>
+            {% if object %}Editar{% else %}Nuevo{% endif %} Plan de Emergencia
+        </h2>
+    </div>
+    <div class="card-body">
+        <!-- Formulario con enctype para subir archivos -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field.errors }}
+                    
+                    {% if field.name == 'imagen' %}
+                        <!-- Aplicación de fileinput para el campo de imagen -->
+                        {{ field|add_class:"form-control file" }}
+                    {% else %}
+                        {{ field|add_class:"form-control" }}
+                    {% endif %}
+                    
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {% if object and object.imagen %}
+                <div class="mb-3">
+                    <label class="form-label">Imagen actual:</label>
+                    <br>
+                    <img src="{{ object.imagen.url }}" alt="Imagen del plan" style="max-width: 150px;">
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'plan-list' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $("#id_imagen").fileinput({
+        allowedFileExtensions: ["png", "jpg", "jpeg"],
+        showCaption: false,
+        dropZoneEnabled: true,
+        browseLabel: "Seleccionar imagen",
+        showUpload: false
+    });
+</script>
+{% endblock %}

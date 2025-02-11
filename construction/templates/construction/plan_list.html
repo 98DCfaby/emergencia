@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Planes de Emergencia{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Planes de Emergencia</h2>
+    <a href="{% url 'plan-create' %}" class="btn btn-primary">Nuevo Plan</a>
+</div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+
+            <table id="tablaPlanes" class="table table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>Obra</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Fecha Creación</th>
+                        <th>Última Actualización</th>
+                        <th>Imagen</th> <!-- Nueva columna de imagen -->
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plan in planes %}
+                    <tr>
+                        <td>{{ plan.obra.nombre }}</td>
+                        <td>{{ plan.nombre }}</td>
+                        <td>{{ plan.estado }}</td>
+                        <td>{{ plan.fecha_creacion }}</td>
+                        <td>{{ plan.fecha_actualizacion }}</td>
+                        <td>
+                            {% if plan.imagen %}
+                                <img src="{{ plan.imagen.url }}" alt="Imagen de {{ plan.nombre }}" style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                                No disponible
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'plan-update' plan.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{% url 'plan-delete' plan.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No hay planes de emergencia registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+</div>
+<script>
+    $(document).ready(function () {
+        $('#tablaPlanes').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['copy', 'excel', 'pdf']
+        });
+    });
+</script>
+{% endblock %}

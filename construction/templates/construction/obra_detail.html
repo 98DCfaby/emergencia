@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalles de Obra{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ obra.nombre }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Información General</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">Dirección:</dt>
+                    <dd class="col-sm-8">{{ obra.direccion }}</dd>
+                    
+                    <dt class="col-sm-4">Fecha Inicio:</dt>
+                    <dd class="col-sm-8">{{ obra.fecha_inicio }}</dd>
+                    
+                    <dt class="col-sm-4">Fecha Fin:</dt>
+                    <dd class="col-sm-8">{{ obra.fecha_fin }}</dd>
+                    
+                    <dt class="col-sm-4">Estado:</dt>
+                    <dd class="col-sm-8">{{ obra.estado }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3>Planes de Emergencia</h3>
+            <a href="{% url 'plan-create' %}" class="btn btn-primary">Nuevo Plan</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Fecha Creación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plan in obra.planemergencia_set.all %}
+                    <tr>
+                        <td>{{ plan.nombre }}</td>
+                        <td>{{ plan.estado }}</td>
+                        <td>{{ plan.fecha_creacion }}</td>
+                        <td>
+                            <a href="{% url 'plan-update' plan.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{% url 'plan-delete' plan.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No hay planes de emergencia registrados para esta obra.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3>Equipos de Seguridad</h3>
+            <a href="{% url 'equipo-create' %}" class="btn btn-primary">Nuevo Equipo</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipo in obra.equiposeguridad_set.all %}
+                    <tr>
+                        <td>{{ equipo.nombre }}</td>
+                        <td>{{ equipo.tipo }}</td>
+                        <td>{{ equipo.cantidad }}</td>
+                        <td>{{ equipo.estado }}</td>
+                        <td>
+                            <a href="{% url 'equipo-update' equipo.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{% url 'equipo-delete' equipo.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No hay equipos de seguridad registrados para esta obra.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Plan de Emergencia{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Eliminar Plan de Emergencia</h2>
+    </div>
+    <div class="card-body">
+        <p>¿Está seguro que desea eliminar el plan "{{ object.nombre }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            <a href="{% url 'plan-list' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

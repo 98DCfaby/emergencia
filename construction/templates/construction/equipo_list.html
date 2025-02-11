@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Equipos de Seguridad{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Equipos de Seguridad</h2>
+    <a href="{% url 'equipo-create' %}" class="btn btn-primary">Nuevo Equipo</a>
+</div>
+
+<div class="table-responsive">
+    <table id="tablaEquipos" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Fecha Adquisición</th>
+                <th>Imagen</th> <!-- Nueva columna de imagen -->
+
+                <th>Estado</th>
+                <th>Obra</th>
+                <th>Acciones</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for equipo in equipos %}
+            <tr>
+                <td>{{ equipo.nombre }}</td>
+                <td>{{ equipo.tipo }}</td>
+                <td>{{ equipo.cantidad }}</td>
+                <td>{{ equipo.fecha_adquisicion }}</td>
+                <td>
+                    {% if equipo.imagen %}
+                        <img src="{{ equipo.imagen.url }}" alt="Imagen de {{ equipo.nombre }}" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </td>
+                <td>{{ equipo.estado }}</td>
+                
+                <td>{{ equipo.obra.nombre }}</td>
+                <td>
+                    <a href="{% url 'equipo-update' equipo.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'equipo-delete' equipo.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No hay equipos de seguridad registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Script para inicializar DataTables -->
+<script>
+    $(document).ready(function () {
+        $('#tablaEquipos').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['copy', 'excel', 'pdf']
+        });
+    });
+</script>
+{% endblock %}

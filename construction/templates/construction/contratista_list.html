@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Contratistas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Contratistas</h2>
+    <a href="{% url 'contratista-create' %}" class="btn btn-primary">Nuevo Contratista</a>
+</div>
+
+<div class="table-responsive">
+    <table id="tablaContratistas" class="table table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Nombre</th>
+                <th>RUT</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Especialidad</th>
+                <th>Imagen</th> <!-- Nueva columna de imagen -->
+
+
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contratista in contratistas %}
+            <tr>
+                <td>{{ contratista.nombre }}</td>
+                <td>{{ contratista.rut }}</td>
+                <td>{{ contratista.telefono }}</td>
+                <td>{{ contratista.email }}</td>
+                <td>{{ contratista.especialidad }}</td>
+                <td>
+                    {% if contratista.imagen %}
+                        <img src="{{ contratista.imagen.url }}" alt="Imagen de {{ contratista.nombre }}" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'contratista-update' contratista.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'contratista-delete' contratista.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No hay contratistas registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Script para inicializar DataTables -->
+<script>
+    $(document).ready(function () {
+        $('#tablaContratistas').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['copy', 'excel', 'pdf']
+        });
+    });
+</script>
+{% endblock %}
